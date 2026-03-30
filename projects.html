@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Achyut Vinoth Kumar</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="leaf-theme.css">
+</head>
+<body data-page="projects" data-lat="39.9526° N" data-lon="75.1652° W">
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="c"></canvas>
+<div class="sl"></div>
+<div class="sig"></div>
+
+<div class="coords">
+  <div id="lat"></div>
+  <div id="lon"></div>
+  <div id="clock"></div>
+</div>
+
+<header class="site-nav">
+  <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="me.html">Me</a>
+    <a class="is-active" href="projects.html">Projects</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a href="ctf-writeups.html">CTFs</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <section class="page-hero reveal">
+    <div>
+      <div class="eyebrow">Projects • Active Work • Archive</div>
+      <h1 class="hero-title">Project <em>Work</em><span>Currently building now, with room for older projects below</span></h1>
+      <p class="lede">This page is the project shelf for the portfolio. The active build sits first, and older projects will live underneath it as the archive fills out over time.</p>
+      <div class="button-row">
+        <a class="button button--primary" href="#currently-building">Currently Building</a>
+        <a class="button button--ghost" href="bubbl.html">Open bubbl! Writeup</a>
+      </div>
+      <div class="tag-list">
+        <span class="tag">Accessibility</span>
+        <span class="tag">Real-Time Systems</span>
+        <span class="tag">Android</span>
+        <span class="tag">Project Archive</span>
+      </div>
+    </div>
+    <aside class="panel reveal">
+      <h2>Projects Snapshot</h2>
+      <ul class="mini-list">
+        <li><span>Currently building</span><strong>bubbl!</strong></li>
+        <li><span>Older projects</span><strong>Archive in progress</strong></li>
+        <li><span>Deep dive</span><strong>bubbl! engineering page</strong></li>
+        <li><span>Companion writing</span><strong>Leaf Litter</strong></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section" id="currently-building">
+    <div class="section-head reveal">
+      <div class="eyebrow">Currently Building</div>
+      <h2>bubbl! is the active product build.</h2>
+      <p class="section-copy">bubbl! is an accessibility-focused mobile communication app designed for deaf and hard-of-hearing users. It uses live speech streaming, face tracking, and anchored caption overlays to keep the transcript visually connected to the person speaking instead of forcing attention down to a detached subtitle region.</p>
+    </div>
+    <div class="grid-2">
+      <article class="capability-card reveal">
+        <div class="card-kicker">bubbl!</div>
+        <h3 class="card-title">A real-time communication interface built around the speaker.</h3>
+        <p>The app combines Kotlin, Jetpack Compose, CameraX, ML Kit face tracking, speech streaming, dynamic caption motion, contextual cues, and accessibility settings into a calm conversation-first interface.</p>
+        <div class="tag-list">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag">CameraX</span>
+          <span class="tag">ML Kit</span>
+        </div>
+      </article>
+      <article class="capability-card reveal">
+        <div class="card-kicker">Engineering View</div>
+        <h3 class="card-title">The deeper writeup covers the hard systems work behind the UX.</h3>
+        <p>The long-form page goes through the speech pipeline, face anchoring, performance tuning, history/session logic, accessibility settings, experimental sign-language work, and the future AR glasses direction.</p>
+        <div class="button-row">
+          <a class="button button--primary" href="bubbl.html">Read bubbl! Writeup</a>
+          <a class="button button--ghost" href="me.html">Open Me</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="older-projects">
+    <div class="section-head reveal">
+      <div class="eyebrow">Older Projects</div>
+      <h2>The archive is ready for future additions.</h2>
+      <p class="section-copy">There are no older project entries published here yet, so this section stays intentionally clean instead of pretending to have depth it does not have yet.</p>
+    </div>
+    <div class="grid-2">
+      <article class="placeholder-block reveal">
+        <strong>Archive Placeholder</strong>
+        <h3>Older projects will land here.</h3>
+        <p>As more finished project work gets added to the portfolio, it will appear in this section underneath the active build.</p>
+      </article>
+      <article class="panel reveal">
+        <div class="card-kicker">For Now</div>
+        <h2>One active build, no filler.</h2>
+        <p>The current layout is deliberate: Bubbl stays at the top as the active project, and the older-projects section stays reserved until there is something real to put there.</p>
+        <p>That keeps the page honest and makes it easy to expand later without redesigning the structure.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="signal-section" id="signal">
+    <div class="signal-panel reveal">
+      <div class="signal-pre">Projects Note</div>
+      <h2>The page now separates active work from the future archive.</h2>
+      <p>bubbl! stays visible as the current build, while the lower section is ready to become the older-projects archive once more work gets added.</p>
+      <div class="signal-links">
+        <a class="button button--primary" href="bubbl.html">Open bubbl!</a>
+        <a class="button button--ghost" href="index.html">Return Home</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Achyut Vinoth Kumar</span>
+  <span>Security Portfolio • Projects</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="leaf-theme.js"></script>
+</body>
+</html>
