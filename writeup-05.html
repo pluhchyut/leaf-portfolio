@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Study 05 — Achyut Vinoth Kumar</title>
+<title>Kubernetes Secrets — Cloud Case Study | Achyut Vinoth Kumar</title>
 <link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="leaf-theme.css">
@@ -23,65 +23,104 @@
   <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
   <nav class="nav-links" aria-label="Primary navigation">
     <a href="index.html">Home</a>
-    <a href="blog.html">Blog</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropdown__trigger" type="button" aria-expanded="false">CTF</button>
-      <div class="nav-dropdown__panel">
-        <a href="ctf-writeups.html">Writeups</a>
-        <a href="ctf-challenges.html">Challenges</a>
-        <a href="leaf-litter.html">Leaf Litter</a>
-      </div>
-    </div>
-    <a href="#signal">Signal</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a class="is-active" href="ctf-writeups.html">CTFs</a>
   </nav>
 </header>
 <main class="page-shell">
-  <section class="article-shell reveal">
-    <article class="article-body">
+  <section class="article-shell">
+    <article class="article-body reveal">
       <div>
-        <div class="eyebrow">Case Study 05 • Wildcard</div>
-        <h1 class="article-title">Selected Cross-Category Study</h1>
-        <div class="article-meta">Selected entry in the CTF archive.</div>
+        <div class="eyebrow">Case Study 05 • Cloud / Infrastructure</div>
+        <h1 class="article-title">Kubernetes secrets: turning cluster access into the flag with almost no app logic</h1>
+        <div class="article-meta">Flag recovered • adapted from the five-case credibility essay</div>
         <div class="tag-list">
-          <span class="tag">Wildcard</span>
+          <span class="tag">Cloud / Infra</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Secrets Enumeration</span>
           <span class="tag">Case Study</span>
-          <span class="tag">Writeup</span>
         </div>
       </div>
       <div class="panel">
-        <h3>Summary</h3>
-        <p>This page is reserved for a flexible cross-category writeup covering pwn, misc, OSINT, or any investigation that deserves its own narrative.</p>
+        <h3>Challenge Summary</h3>
+        <div class="article-copy">
+          <p>This case is a reminder that not every compromise looks like code execution. Sometimes the real path is simply that the control-plane credentials have already been handed over and the rest is calm, correct enumeration.</p>
+        </div>
       </div>
-      <div class="placeholder-block">
-        <strong>Portfolio Archive</strong>
-        <h3>Detailed case study overview.</h3>
-        <p>The archive supports a full fifth entry for challenge work that does not fit cleanly into a single category.</p>
+      <div class="panel">
+        <h3>Why It Was Hard</h3>
+        <div class="article-copy">
+          <p>The tricky part was not exploitation syntax. It was realizing that the supplied kubeconfig was the attack surface, and that Kubernetes secrets are only “hidden” until someone with the right identity asks the control plane for them.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Approach</h3>
+        <div class="article-copy">
+          <ul>
+            <li><strong>Start with the credentials you were given.</strong> <code>kubeconfig.yaml</code> already contained the cluster information, client certificate, and private key material needed to authenticate.</li>
+            <li><strong>Make the config usable against the cluster.</strong> Once the challenge endpoint was live, I used the supplied kubeconfig with <code>kubectl</code> and followed the hint about relaxed TLS handling just to prove I could talk to the control plane as the provided identity.</li>
+            <li><strong>Enumerate before guessing object names.</strong> I started with <code>kubectl get namespaces</code> and <code>kubectl get secrets -A</code> instead of inventing object names or assuming the flag lived in <code>default</code> without evidence.</li>
+            <li><strong>Pull the secret as structured data.</strong> Once the right secret object was identified, I fetched it with JSON or <code>jsonpath</code>. At that point the remaining step was base64 decoding, not “exploitation” in the flashy sense.</li>
+            <li><strong>Treat the platform itself as the target.</strong> There was no need for code execution, pod escape, or container abuse. Authenticated access to the Kubernetes API already gave the correct read path.</li>
+          </ul>
+          <p>This writeup is in the portfolio because it shows a calmer style of security work: understand the platform, trust the data model, and let enumeration do the heavy lifting.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>kubectl Snapshot</h3>
+        <pre class="flow-block">$ kubectl --kubeconfig kubeconfig.yaml get secrets -A
+NAMESPACE   NAME          TYPE     DATA
+default     flag-secret   Opaque   1
+
+$ kubectl --kubeconfig kubeconfig.yaml get secret flag-secret -o jsonpath='{.data.flag}'
+cGljb0NURnt...base64...
+
+$ python3 -c 'import base64; print(base64.b64decode("...").decode())'
+flag material recovered from the control plane itself</pre>
+      </div>
+      <div class="panel">
+        <h3>Outcome</h3>
+        <div class="article-copy">
+          <p>Flag recovered in the original solve by authenticating with the supplied kubeconfig, enumerating the relevant secret, and decoding the value directly from the control plane.</p>
+          <p>Infrastructure challenges often reward patience over aggression. This page is here because it shows that calm enumeration can be the entire exploit path when the platform model is the real challenge.</p>
+        </div>
       </div>
       <div class="article-nav">
         <a class="button button--ghost" href="writeup-04.html">Previous case study</a>
         <a class="button button--primary" href="ctf-writeups.html">Return to archive</a>
       </div>
     </article>
-    <aside class="article-sidebar reveal">
-      <h2>Case Study</h2>
-      <ul class="mini-list">
-        <li><span>Index</span><strong>05 / 05</strong></li>
-        <li><span>Track</span><strong>Wildcard</strong></li>
-        <li><span>Status</span><strong>Forthcoming</strong></li>
-      </ul>
+    <aside class="sidebar-stack reveal">
+      <div class="article-sidebar">
+        <h2>Case Study</h2>
+        <ul class="mini-list">
+          <li><span>Index</span><strong>05 / 05</strong></li>
+          <li><span>Track</span><strong>Cloud / Infra</strong></li>
+          <li><span>Status</span><strong>Solved</strong></li>
+          <li><span>Result</span><strong>Flag recovered</strong></li>
+        </ul>
+      </div>
+      <div class="article-sidebar">
+        <h2>Context</h2>
+        <p>This page adapts the Kubernetes section of the five-case credibility essay into a standalone infrastructure case study.</p>
+        <div class="toc-list">
+          <a href="ctf_credibility_piece.html#kube">Read the full essay section</a>
+          <a href="ctf_credibility_piece.html">Open the full five-case post</a>
+        </div>
+      </div>
     </aside>
   </section>
   <section class="signal-section" id="signal">
     <div class="signal-panel reveal">
       <div class="signal-pre">Archive Note</div>
-      <h2>This entry completes the first set of featured case studies.</h2>
-      <p>The page is intended for investigations that cut across categories while still benefiting from a full technical narrative.</p>
+      <h2>This entry closes the first case-study set with an infrastructure solve.</h2>
+      <p>The exploit path was not “attack harder.” It was use the credentials correctly, enumerate what was already exposed, and decode the returned secret.</p>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <span>© 2026 Achyut Vinoth Kumar</span>
-  <span>Security Portfolio • Case Study 05</span>
+  <span>Security Portfolio • Kubernetes Secrets</span>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="leaf-theme.js"></script>

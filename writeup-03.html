@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Study 03 — Achyut Vinoth Kumar</title>
+<title>Heapedit — Tcache Case Study | Achyut Vinoth Kumar</title>
 <link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="leaf-theme.css">
@@ -23,65 +23,105 @@
   <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
   <nav class="nav-links" aria-label="Primary navigation">
     <a href="index.html">Home</a>
-    <a href="blog.html">Blog</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropdown__trigger" type="button" aria-expanded="false">CTF</button>
-      <div class="nav-dropdown__panel">
-        <a href="ctf-writeups.html">Writeups</a>
-        <a href="ctf-challenges.html">Challenges</a>
-        <a href="leaf-litter.html">Leaf Litter</a>
-      </div>
-    </div>
-    <a href="#signal">Signal</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a class="is-active" href="ctf-writeups.html">CTFs</a>
   </nav>
 </header>
 <main class="page-shell">
-  <section class="article-shell reveal">
-    <article class="article-body">
+  <section class="article-shell">
+    <article class="article-body reveal">
       <div>
-        <div class="eyebrow">Case Study 03 • Forensics</div>
-        <h1 class="article-title">Selected Forensics Study</h1>
-        <div class="article-meta">Selected entry in the CTF archive.</div>
+        <div class="eyebrow">Case Study 03 • Heap / Pwn</div>
+        <h1 class="article-title">Heapedit: reading glibc tcache like a data structure, not a mystery</h1>
+        <div class="article-meta">Flag recovered • adapted from the five-case credibility essay</div>
         <div class="tag-list">
-          <span class="tag">Forensics</span>
+          <span class="tag">Binary Exploitation</span>
+          <span class="tag">Allocator Internals</span>
+          <span class="tag">Tcache</span>
           <span class="tag">Case Study</span>
-          <span class="tag">Writeup</span>
         </div>
       </div>
       <div class="panel">
-        <h3>Summary</h3>
-        <p>This page is reserved for a forensics-focused breakdown with evidence handling, timeline reconstruction, and tooling notes.</p>
+        <h3>Challenge Summary</h3>
+        <div class="article-copy">
+          <p>The flag was never behind shellcode or a return-address overwrite. It was sitting in a freed heap chunk, and the solve depended on recognizing that the allocator’s free-list pointers were the real structure to follow.</p>
+        </div>
       </div>
-      <div class="placeholder-block">
-        <strong>Portfolio Archive</strong>
-        <h3>Detailed case study overview.</h3>
-        <p>The format supports longer investigative writing without sacrificing structure or readability.</p>
+      <div class="panel">
+        <h3>Why It Was Hard</h3>
+        <div class="article-copy">
+          <p>This kind of pwn problem punishes guessing. The only clean path is to understand how a freed chunk stores the next pointer and how the program validates the traversal it expects back.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Approach</h3>
+        <div class="article-copy">
+          <ul>
+            <li><strong>Read the source all the way through.</strong> In <code>heapedit.c</code>, the program allocates six same-sized chunks, zeros them, reads the flag from disk, and copies it into the last chunk at <code>FLAG_OFFSET</code>, right after the pointer-sized region that tcache uses for free-list metadata.</li>
+            <li><strong>Pay attention to free order.</strong> The chunks are freed in reverse order, which makes the final tcache head <code>chunks[0]</code>. The binary even prints that head, turning the entire task into a linked-list reconstruction problem.</li>
+            <li><strong>Follow allocator metadata, not the flag text.</strong> After each correct answer, the program copies the next pointer out of the freed chunk into <code>next</code>. Once I saw that, the solve collapsed into free-list order rather than fuzzing random addresses.</li>
+            <li><strong>Use the invariant to recover the final chunk.</strong> Because all six chunk addresses are known and the program validates that each next pointer belongs to that set, the traversal can be reasoned through cleanly.</li>
+            <li><strong>Let the program print the reward.</strong> After the traversal is satisfied, the binary prints <code>chunks[CHUNK_COUNT-1] + FLAG_OFFSET</code>. The exploit is really about proving you understand allocator state well enough for the binary to reveal the string itself.</li>
+          </ul>
+          <p>This is one of my favorite examples of how source-reading turns “heap sorcery” into a very understandable data-structure problem.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Source Snapshot</h3>
+        <pre class="flow-block">memcpy((char*)chunks[CHUNK_COUNT-1] + FLAG_OFFSET, flag_buf, flen + 1);
+void *head = chunks[0];
+printf("tcache head (start of free list) -> %p\n", head);
+
+for (int i = CHUNK_COUNT - 1; i >= 0; --i) {
+    free(chunks[i]);
+}
+
+Read the allocator layout first.
+The exploit path is a traversal problem, not a smash-the-stack problem.</pre>
+      </div>
+      <div class="panel">
+        <h3>Outcome</h3>
+        <div class="article-copy">
+          <p>Flag recovered in the original solve by reconstructing the free-list order correctly and following allocator metadata all the way to the chunk that still held the copied flag bytes.</p>
+          <p>The broader lesson is that many hard heap challenges become much cleaner once I stop thinking in terms of corruption first and start reasoning in terms of allocator invariants.</p>
+        </div>
       </div>
       <div class="article-nav">
         <a class="button button--ghost" href="writeup-02.html">Previous case study</a>
         <a class="button button--primary" href="writeup-04.html">Next case study</a>
       </div>
     </article>
-    <aside class="article-sidebar reveal">
-      <h2>Case Study</h2>
-      <ul class="mini-list">
-        <li><span>Index</span><strong>03 / 05</strong></li>
-        <li><span>Track</span><strong>Forensics</strong></li>
-        <li><span>Status</span><strong>Forthcoming</strong></li>
-      </ul>
+    <aside class="sidebar-stack reveal">
+      <div class="article-sidebar">
+        <h2>Case Study</h2>
+        <ul class="mini-list">
+          <li><span>Index</span><strong>03 / 05</strong></li>
+          <li><span>Track</span><strong>Heap / Pwn</strong></li>
+          <li><span>Status</span><strong>Solved</strong></li>
+          <li><span>Result</span><strong>Flag recovered</strong></li>
+        </ul>
+      </div>
+      <div class="article-sidebar">
+        <h2>Context</h2>
+        <p>This entry adapts the allocator-focused section of the full five-case essay into a standalone case-study page.</p>
+        <div class="toc-list">
+          <a href="ctf_credibility_piece.html#heapedit">Read the full essay section</a>
+          <a href="ctf_credibility_piece.html">Open the full five-case post</a>
+        </div>
+      </div>
     </aside>
   </section>
   <section class="signal-section" id="signal">
     <div class="signal-panel reveal">
       <div class="signal-pre">Archive Note</div>
-      <h2>This case study is intended for deeper investigative writing.</h2>
-      <p>The page is intended for evidence-driven analysis with enough space for methodology, interpretation, and conclusions.</p>
+      <h2>This case is here because allocator literacy is a real exploit skill.</h2>
+      <p>The interesting part was not corruption alone. It was recognizing that the free list itself was the exploit path.</p>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <span>© 2026 Achyut Vinoth Kumar</span>
-  <span>Security Portfolio • Case Study 03</span>
+  <span>Security Portfolio • Heapedit</span>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="leaf-theme.js"></script>

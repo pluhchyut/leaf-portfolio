@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Study 04 — Achyut Vinoth Kumar</title>
+<title>VulnBank — Smart Contract Case Study | Achyut Vinoth Kumar</title>
 <link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="leaf-theme.css">
@@ -23,65 +23,105 @@
   <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
   <nav class="nav-links" aria-label="Primary navigation">
     <a href="index.html">Home</a>
-    <a href="blog.html">Blog</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropdown__trigger" type="button" aria-expanded="false">CTF</button>
-      <div class="nav-dropdown__panel">
-        <a href="ctf-writeups.html">Writeups</a>
-        <a href="ctf-challenges.html">Challenges</a>
-        <a href="leaf-litter.html">Leaf Litter</a>
-      </div>
-    </div>
-    <a href="#signal">Signal</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a class="is-active" href="ctf-writeups.html">CTFs</a>
   </nav>
 </header>
 <main class="page-shell">
-  <section class="article-shell reveal">
-    <article class="article-body">
+  <section class="article-shell">
+    <article class="article-body reveal">
       <div>
-        <div class="eyebrow">Case Study 04 • Crypto</div>
-        <h1 class="article-title">Selected Cryptography Study</h1>
-        <div class="article-meta">Selected entry in the CTF archive.</div>
+        <div class="eyebrow">Case Study 04 • Blockchain</div>
+        <h1 class="article-title">VulnBank: draining a contract that “checked balances” but paid too early</h1>
+        <div class="article-meta">Flag recovered • adapted from the five-case credibility essay</div>
         <div class="tag-list">
-          <span class="tag">Crypto</span>
+          <span class="tag">Blockchain</span>
+          <span class="tag">Smart Contract Audit</span>
+          <span class="tag">Reentrancy</span>
           <span class="tag">Case Study</span>
-          <span class="tag">Writeup</span>
         </div>
       </div>
       <div class="panel">
-        <h3>Summary</h3>
-        <p>This page is reserved for a cryptography writeup with the explanation space needed for math-heavy or reasoning-heavy solves.</p>
+        <h3>Challenge Summary</h3>
+        <div class="article-copy">
+          <p>This is the classic smart-contract pattern that survives reviews more often than it should: the contract has checks, the balances exist, and it still loses because the external call happens before the state update.</p>
+        </div>
       </div>
-      <div class="placeholder-block">
-        <strong>Portfolio Archive</strong>
-        <h3>Detailed case study overview.</h3>
-        <p>The format is designed for readable derivations, attack reasoning, and a slower, clearer breakdown.</p>
+      <div class="panel">
+        <h3>Why It Was Hard</h3>
+        <div class="article-copy">
+          <p>The bug is conceptually simple, but a strong writeup shows more than naming “reentrancy.” The real work is spotting it quickly in source, reading the actual win condition, and building the smallest exploit that drains the vault cleanly instead of just proving recursive entry exists.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Approach</h3>
+        <div class="article-copy">
+          <ul>
+            <li><strong>Start with the order of operations.</strong> In <code>VulnBank.sol</code>, <code>msg.sender.call{value: amount}("")</code> executes before <code>balances[msg.sender] -= amount</code>, which means control is returned to the recipient while the old balance is still recorded.</li>
+            <li><strong>Check the full win condition.</strong> The contract only reveals the flag when <code>address(this).balance == 0</code>, so the real goal is not just “reenter once,” but drain the vault to the exact reveal point.</li>
+            <li><strong>Write the smallest possible attack contract.</strong> The helper only needed a seed deposit function and a <code>receive()</code> fallback that called back into <code>withdraw()</code> before the previous call had reduced the recorded balance.</li>
+            <li><strong>Use a controlled recursion amount.</strong> By withdrawing in the same increment repeatedly, the mapping check kept seeing the old balance on nested entry and the vault kept paying out until it neared zero.</li>
+            <li><strong>Stop at the reveal point.</strong> The clean solve is the one that empties the contract and unlocks the flag logic without overshooting or breaking the recursion.</li>
+          </ul>
+          <p>What made this satisfying was how small the exploit was. No EVM trickery, just careful source reading and one receiver contract that turned the contract’s own payout order against it.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Source Snapshot</h3>
+        <pre class="flow-block">function withdraw(uint amount) public {
+    require(balances[msg.sender] >= amount, "Insufficient funds available");
+
+    (bool sent, ) = msg.sender.call{value: amount}("");
+    balances[msg.sender] -= amount;
+
+    require(sent, "Transfer failed");
+}
+
+External interaction before effect update = reentrancy window.</pre>
+      </div>
+      <div class="panel">
+        <h3>Outcome</h3>
+        <div class="article-copy">
+          <p>Flag recovered in the original solve by using a reentrant receiver contract to withdraw repeatedly before the balance ledger updated, draining the vault to the exact reveal condition.</p>
+          <p>This case is in the portfolio because it shows that “we added checks” is not a security argument. In contracts especially, the order of effects matters just as much as the existence of a guard.</p>
+        </div>
       </div>
       <div class="article-nav">
         <a class="button button--ghost" href="writeup-03.html">Previous case study</a>
         <a class="button button--primary" href="writeup-05.html">Next case study</a>
       </div>
     </article>
-    <aside class="article-sidebar reveal">
-      <h2>Case Study</h2>
-      <ul class="mini-list">
-        <li><span>Index</span><strong>04 / 05</strong></li>
-        <li><span>Track</span><strong>Crypto</strong></li>
-        <li><span>Status</span><strong>Forthcoming</strong></li>
-      </ul>
+    <aside class="sidebar-stack reveal">
+      <div class="article-sidebar">
+        <h2>Case Study</h2>
+        <ul class="mini-list">
+          <li><span>Index</span><strong>04 / 05</strong></li>
+          <li><span>Track</span><strong>Blockchain</strong></li>
+          <li><span>Status</span><strong>Solved</strong></li>
+          <li><span>Result</span><strong>Flag recovered</strong></li>
+        </ul>
+      </div>
+      <div class="article-sidebar">
+        <h2>Context</h2>
+        <p>This entry pulls the smart-contract section out of the full five-case essay and presents it as a standalone case study.</p>
+        <div class="toc-list">
+          <a href="ctf_credibility_piece.html#vulnbank">Read the full essay section</a>
+          <a href="ctf_credibility_piece.html">Open the full five-case post</a>
+        </div>
+      </div>
     </aside>
   </section>
   <section class="signal-section" id="signal">
     <div class="signal-panel reveal">
       <div class="signal-pre">Archive Note</div>
-      <h2>This entry is intended for the archive’s more explanation-heavy work.</h2>
-      <p>The layout supports slower technical walkthroughs where clarity matters as much as the final result.</p>
+      <h2>This case study keeps the exploit minimal and the reasoning visible.</h2>
+      <p>The point is not just that the bug existed. The point is reading the contract closely enough to drain it cleanly and deliberately.</p>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <span>© 2026 Achyut Vinoth Kumar</span>
-  <span>Security Portfolio • Case Study 04</span>
+  <span>Security Portfolio • VulnBank</span>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="leaf-theme.js"></script>

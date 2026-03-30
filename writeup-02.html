@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Study 02 — Achyut Vinoth Kumar</title>
+<title>Router — Heap Exploit Case Study | Achyut Vinoth Kumar</title>
 <link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="leaf-theme.css">
@@ -23,65 +23,107 @@
   <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
   <nav class="nav-links" aria-label="Primary navigation">
     <a href="index.html">Home</a>
-    <a href="blog.html">Blog</a>
-    <div class="nav-dropdown">
-      <button class="nav-dropdown__trigger" type="button" aria-expanded="false">CTF</button>
-      <div class="nav-dropdown__panel">
-        <a href="ctf-writeups.html">Writeups</a>
-        <a href="ctf-challenges.html">Challenges</a>
-        <a href="leaf-litter.html">Leaf Litter</a>
-      </div>
-    </div>
-    <a href="#signal">Signal</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a class="is-active" href="ctf-writeups.html">CTFs</a>
   </nav>
 </header>
 <main class="page-shell">
-  <section class="article-shell reveal">
-    <article class="article-body">
+  <section class="article-shell">
+    <article class="article-body reveal">
       <div>
-        <div class="eyebrow">Case Study 02 • Reverse</div>
-        <h1 class="article-title">Selected Reverse Engineering Study</h1>
-        <div class="article-meta">Selected entry in the CTF archive.</div>
+        <div class="eyebrow">Case Study 02 • Binary Exploitation</div>
+        <h1 class="article-title">Router: turning leaked output and bad indices into a heap exploit</h1>
+        <div class="article-meta">Flag recovered • adapted from the five-case credibility essay</div>
         <div class="tag-list">
-          <span class="tag">Reverse</span>
+          <span class="tag">Binary Exploitation</span>
+          <span class="tag">Heap</span>
+          <span class="tag">No Source</span>
+          <span class="tag">OOB Index</span>
           <span class="tag">Case Study</span>
-          <span class="tag">Writeup</span>
         </div>
       </div>
       <div class="panel">
-        <h3>Summary</h3>
-        <p>This page is reserved for a reverse engineering case study with room for binary notes, decompilation screenshots, and a complete solve path.</p>
+        <h3>Challenge Summary</h3>
+        <div class="article-copy">
+          <p>This challenge looked like a harmless route planner on the surface. The real work was learning how orders, maps, and rerouting logic were arranged on the heap when the only interface was a text menu.</p>
+        </div>
       </div>
-      <div class="placeholder-block">
-        <strong>Portfolio Archive</strong>
-        <h3>Detailed case study overview.</h3>
-        <p>The structure is designed for tooling notes, annotated analysis, and a step-by-step reconstruction.</p>
+      <div class="panel">
+        <h3>Why It Was Hard</h3>
+        <div class="article-copy">
+          <p>There was no source, the binary changed per instance, and the bug only surfaced through user-facing indices. The useful hints were behavioral, not structural: strange output and indices that pushed across object boundaries without immediately crashing the process.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Approach</h3>
+        <div class="article-copy">
+          <ul>
+            <li><strong>Learn the normal program flow first.</strong> I used <code>help</code>, loaded maps, created orders, rerouted them normally, and dispatched them so I could see what healthy output looked like before touching the bug.</li>
+            <li><strong>Use order creation as heap grooming.</strong> Multiple live orders forced the binary to allocate a repeatable set of objects, which made it easier to watch when route data started leaking neighboring state.</li>
+            <li><strong>Probe the index boundary carefully.</strong> I moved from valid indices to edge cases and then to negative values. The goal was not a crash, but a leak that exposed internal state without killing the session.</li>
+            <li><strong>Turn the leak into orientation.</strong> Once output started including bytes that did not belong to the selected order, I repeated the same allocation pattern until I could estimate which objects sat next to each other on the heap.</li>
+            <li><strong>Promote the bug into control.</strong> After the layout stabilized, the out-of-bounds access stopped being “weird output” and became a constrained write into adjacent metadata, which was enough to redirect execution toward the hidden success path.</li>
+          </ul>
+          <p>This mattered because the exploit path became repeatable. The binary taught me its own memory model through repeated interaction, and the final solve came from using that model instead of gambling on one-off corruption.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Terminal Snapshot</h3>
+        <pre class="flow-block">$ nc mysterious-sea.picoctf.net 51703
+router> help
+router> load city1.map
+router> add_order A1 B7
+router> add_order C3 D9
+router> reroute -1
+debug-ish output leaks internal route state
+router> dispatch
+
+Working theory: a negative or oversized index crosses from one heap object into the next
+Exploit goal: use the leak to stabilize the corruption instead of brute forcing it</pre>
+      </div>
+      <div class="panel">
+        <h3>Outcome</h3>
+        <div class="article-copy">
+          <p>Flag recovered in the original solve after stabilizing the out-of-bounds heap behavior with leaked state from the text interface. The important part of the writeup is that the exploit path became deliberate, not lucky.</p>
+          <p>When source is missing, the interface becomes the debugger. This case is in the archive because it shows how I build a memory model from behavior instead of guessing from vibes.</p>
+        </div>
       </div>
       <div class="article-nav">
         <a class="button button--ghost" href="writeup-01.html">Previous case study</a>
         <a class="button button--primary" href="writeup-03.html">Next case study</a>
       </div>
     </article>
-    <aside class="article-sidebar reveal">
-      <h2>Case Study</h2>
-      <ul class="mini-list">
-        <li><span>Index</span><strong>02 / 05</strong></li>
-        <li><span>Track</span><strong>Reverse</strong></li>
-        <li><span>Status</span><strong>Forthcoming</strong></li>
-      </ul>
+    <aside class="sidebar-stack reveal">
+      <div class="article-sidebar">
+        <h2>Case Study</h2>
+        <ul class="mini-list">
+          <li><span>Index</span><strong>02 / 05</strong></li>
+          <li><span>Track</span><strong>Binary / Heap</strong></li>
+          <li><span>Status</span><strong>Solved</strong></li>
+          <li><span>Result</span><strong>Flag recovered</strong></li>
+        </ul>
+      </div>
+      <div class="article-sidebar">
+        <h2>Context</h2>
+        <p>This entry is one of the five cases from the full credibility essay and focuses on a source-less heap exploitation workflow.</p>
+        <div class="toc-list">
+          <a href="ctf_credibility_piece.html#router">Read the full essay section</a>
+          <a href="ctf_credibility_piece.html">Open the full five-case post</a>
+        </div>
+      </div>
     </aside>
   </section>
   <section class="signal-section" id="signal">
     <div class="signal-panel reveal">
       <div class="signal-pre">Archive Note</div>
-      <h2>This entry sits inside the same case-study format as the broader archive.</h2>
-      <p>The layout is built to present methodology, tooling, and outcomes clearly once the full writeup is published.</p>
+      <h2>This case study shows how a text interface can become a heap debugger.</h2>
+      <p>The solve came from repeated, disciplined interaction and leak interpretation, not from a single magic input.</p>
     </div>
   </section>
 </main>
 <footer class="site-footer">
   <span>© 2026 Achyut Vinoth Kumar</span>
-  <span>Security Portfolio • Case Study 02</span>
+  <span>Security Portfolio • Router</span>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="leaf-theme.js"></script>
