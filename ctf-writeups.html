@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selected CTF Writeups — Achyut Vinoth Kumar</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="void-theme.css">
+</head>
+<body data-page="writeups" data-lat="37.7749° N" data-lon="122.4194° W">
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="c"></canvas>
+<div class="sl"></div>
+<div class="sig"></div>
+
+<div class="coords">
+  <div id="lat"></div>
+  <div id="lon"></div>
+  <div id="clock"></div>
+</div>
+
+<header class="site-nav">
+  <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <div class="nav-dropdown is-open">
+      <button class="nav-dropdown__trigger" type="button" aria-expanded="true">CTF</button>
+      <div class="nav-dropdown__panel">
+        <a href="ctf-writeups.html">Writeups</a>
+        <a href="ctf-challenges.html">Challenges</a>
+        <a href="leaf-litter.html">Leaf Litter</a>
+      </div>
+    </div>
+    <a href="#signal">Signal</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <section class="page-hero reveal">
+    <div>
+      <div class="eyebrow">CTF Archive • Case Studies</div>
+      <h1 class="hero-title">CTF <em>Writeups</em><span>Selected case studies and challenge analysis</span></h1>
+      <p class="lede">This archive collects long-form CTF writeups with room for exploit development, source analysis, screenshots, and post-solve reflection.</p>
+      <div class="button-row">
+        <a class="button button--primary" href="writeup-01.html">Open Case Study 01</a>
+        <a class="button button--ghost" href="blog.html">View Writing & Research</a>
+      </div>
+    </div>
+    <aside class="panel reveal">
+      <h2>Archive Format</h2>
+      <ul class="mini-list">
+        <li><span>Layout</span><strong>Individual pages</strong></li>
+        <li><span>Count</span><strong>05 featured entries</strong></li>
+        <li><span>Style</span><strong>Detailed breakdowns</strong></li>
+        <li><span>Focus</span><strong>Method / reasoning</strong></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Selected Case Studies</div>
+      <h2>Current archive lineup.</h2>
+    </div>
+    <div class="post-grid">
+      <a class="post-card reveal" href="writeup-01.html">
+        <div class="post-card__top">
+          <div class="post-meta">Web</div>
+          <div class="post-index">01</div>
+        </div>
+        <h3 class="card-title">Case Study 01 // Web exploitation</h3>
+        <p>Web challenge analysis focused on reconnaissance, bug-chain construction, and exploit execution.</p>
+      </a>
+      <a class="post-card reveal" href="writeup-02.html">
+        <div class="post-card__top">
+          <div class="post-meta">Reverse</div>
+          <div class="post-index">02</div>
+        </div>
+        <h3 class="card-title">Case Study 02 // Reverse engineering</h3>
+        <p>Binary analysis and reversing workflow with space for annotated tooling notes and reconstruction.</p>
+      </a>
+      <a class="post-card reveal" href="writeup-03.html">
+        <div class="post-card__top">
+          <div class="post-meta">Forensics</div>
+          <div class="post-index">03</div>
+        </div>
+        <h3 class="card-title">Case Study 03 // Forensics</h3>
+        <p>Evidence reconstruction, file analysis, and artifact-driven reporting with a clear investigative trail.</p>
+      </a>
+      <a class="post-card reveal" href="writeup-04.html">
+        <div class="post-card__top">
+          <div class="post-meta">Crypto</div>
+          <div class="post-index">04</div>
+        </div>
+        <h3 class="card-title">Case Study 04 // Crypto</h3>
+        <p>Math-heavy challenge work presented with readable attack reasoning, derivations, and conclusion notes.</p>
+      </a>
+      <a class="post-card reveal" href="writeup-05.html">
+        <div class="post-card__top">
+          <div class="post-meta">Wildcard</div>
+          <div class="post-index">05</div>
+        </div>
+        <h3 class="card-title">Case Study 05 // Wildcard</h3>
+        <p>Flexible entry for pwn, misc, OSINT, or cross-category investigations that merit a dedicated writeup.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="signal-section" id="signal">
+    <div class="signal-panel reveal">
+      <div class="signal-pre">Archive Note</div>
+      <h2>The writeup shelf is designed for detailed technical review.</h2>
+      <p>Each entry uses the same long-form structure so methodology, tooling, and outcomes can be compared consistently across challenges.</p>
+      <div class="signal-links">
+        <a class="button button--primary" href="writeup-01.html">Open Case Study 01</a>
+        <a class="button button--ghost" href="leaf-litter.html">Open Leaf Litter</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Achyut Vinoth Kumar</span>
+  <span>Security Portfolio • CTF Writeups</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="void-theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaf Litter — Build Log</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="void-theme.css">
+</head>
+<body data-page="leaf-litter" data-lat="25.7617° N" data-lon="80.1918° W">
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="c"></canvas>
+<div class="sl"></div>
+<div class="sig"></div>
+
+<div class="coords">
+  <div id="lat"></div>
+  <div id="lon"></div>
+  <div id="clock"></div>
+</div>
+
+<header class="site-nav">
+  <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <div class="nav-dropdown is-open">
+      <button class="nav-dropdown__trigger" type="button" aria-expanded="true">CTF</button>
+      <div class="nav-dropdown__panel">
+        <a href="ctf-writeups.html">Writeups</a>
+        <a href="ctf-challenges.html">Challenges</a>
+        <a class="is-active" href="leaf-litter.html">Leaf Litter</a>
+      </div>
+    </div>
+    <a href="#signal">Signal</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <section class="page-hero reveal">
+    <div>
+      <div class="eyebrow">Agent Log • Architecture Post</div>
+      <h1 class="hero-title">Leaf <em>Litter</em><span>A challenge operating system for CTF automation</span></h1>
+      <p class="lede">Capture the Flag competitions are not one problem. Leaf Litter is the project where that idea turns into an operational system for CTF automation: specialized runtimes, recovery logic, live control surfaces, and enough memory to learn from every run.</p>
+      <div class="tag-list">
+        <span class="tag">Leaf Litter</span>
+        <span class="tag">CTF Automation</span>
+        <span class="tag">Multi-Agent Runtime</span>
+        <span class="tag">Benchmarking</span>
+        <span class="tag">Platform Mode</span>
+      </div>
+      <div class="button-row">
+        <a class="button button--primary" href="#overview">Read Case Study</a>
+        <a class="button button--ghost" href="blog.html">View Writing & Research</a>
+      </div>
+    </div>
+    <aside class="panel reveal">
+      <h2>Project Snapshot</h2>
+      <ul class="mini-list">
+        <li><span>Name</span><strong>Leaf Litter</strong></li>
+        <li><span>Form</span><strong>Squid agent</strong></li>
+        <li><span>Focus</span><strong>CTF auto-solver</strong></li>
+        <li><span>Lineage</span><strong>Squid Agent inspired</strong></li>
+        <li><span>Status</span><strong>Active project case study</strong></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="stats-grid">
+      <article class="stat-card reveal">
+        <div class="card-kicker">System Shape</div>
+        <strong>05</strong>
+        <span>Major layers in the core stack</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Specialists</div>
+        <strong>06</strong>
+        <span>Primary category lanes including misc bridging</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Fast Path</div>
+        <strong>Codex</strong>
+        <span>Cheap first shot before full orchestration</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Ops Mode</div>
+        <strong>Live</strong>
+        <span>Platform solves, reports, and replay artifacts</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="article-shell">
+      <article class="article-body">
+        <section class="panel reveal" id="overview">
+          <div class="card-kicker">Abstract</div>
+          <h3>A challenge operating system, not just another agent.</h3>
+          <div class="article-copy">
+            <p>Capture the Flag competitions are a rotating stack of completely different disciplines forced into the same clock. A reversing binary, a kernel pwn target, a JWT bug, a lattice attack, a damaged QR code, a memory dump, and a weird mixed-category puzzle do not want the same workflow. Leaf Litter starts from that reality instead of flattening everything into one giant prompt.</p>
+            <div class="quote-pull">Can you build a system that behaves like a serious CTF operator?</div>
+            <ul>
+              <li><strong>Ingest messy challenge inputs:</strong> files, zips, copied descriptions, service metadata, and half-clean workspaces without forcing manual cleanup first.</li>
+              <li><strong>Choose the right workflow:</strong> decide what kind of problem it is, which tools belong, and when a cheap first pass is enough.</li>
+              <li><strong>Operate like infrastructure:</strong> recover from crashes, remember prior work, benchmark honestly, and leave behind reports, snapshots, and artifacts.</li>
+            </ul>
+            <p>Leaf Litter began as an answer to the design philosophy behind Squid Agent and quickly grew into something larger: a challenge normalizer, capability detector, fast-path Codex wrapper, generated category-specific multi-agent runtime, control center, benchmark harness, replay engine, memory layer, and reporting stack.</p>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="lineage">
+          <div class="card-kicker">Lineage</div>
+          <h3>Why Squid Agent mattered, and where Leaf Litter pushes further.</h3>
+          <div class="article-copy">
+            <p>What made Squid Agent compelling was not just that it could solve CTF problems. It treated orchestration, specialization, and benchmarking like real system concerns. That framing clicked immediately: if strong human teams specialize by category, an automated system should not avoid specialization on purpose.</p>
+            <ul>
+              <li><strong>Category specialization:</strong> reversing, pwn, crypto, web, forensics, and misc should have different role graphs and different attack postures.</li>
+              <li><strong>Tool discipline:</strong> tool access is part of agent design, not a loose implementation detail.</li>
+              <li><strong>Benchmark-first thinking:</strong> the project should be measured like engineering work, not narrated like a demo.</li>
+            </ul>
+            <p>Leaf Litter follows that line directly, then leans harder into operator experience, environment readiness, fallback behavior, live platform automation, persistence, replayability, runtime safety, and post-mortem visibility.</p>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="architecture">
+          <div class="card-kicker">Architecture</div>
+          <h3>Five layers tied into one coordinated stack.</h3>
+          <div class="article-copy">
+            <pre class="flow-block">Challenge Input
+  -&gt; Normalizer
+  -&gt; Normalized Descriptor + Files Workspace
+  -&gt; Capability Detection + Preflight + Solve-Time Estimation
+  -&gt; Codex-First Fast Path
+  -&gt; Category-Specific Preanalysis
+  -&gt; Generated Multi-Agent Runtime
+  -&gt; Strategy Ensemble / Replay / Escalation / Fallback
+  -&gt; Flag Resolution + Validation + Optional Platform Submission
+  -&gt; Memory / RAG / Snapshots / Reports / Logs / Artifacts</pre>
+            <ul>
+              <li><strong>Challenge intake and normalization:</strong> standardize messy input into stable descriptors and a consistent file workspace.</li>
+              <li><strong>Fast-path and category-aware solving:</strong> take an inexpensive first shot, then escalate into generated specialist runtimes when the challenge deserves it.</li>
+              <li><strong>Self-healing runtime control:</strong> watchdogs, budget controls, retries, and model routing keep the system from wasting time or money blindly.</li>
+              <li><strong>Operator-facing control surfaces:</strong> terminal and browser interfaces make the solver feel usable under pressure.</li>
+              <li><strong>Memory, platform mode, and replay:</strong> every run feeds reports, retrieval, and reproducible artifacts instead of disappearing after the flag.</li>
+            </ul>
+            <p>The layers are meant to behave like one stack. The normalizer feeds the generator, the generator feeds the solver, and the solver feeds memory, RAG, snapshots, and reports.</p>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="pipeline">
+          <div class="card-kicker">Solve Pipeline</div>
+          <h3>Normalize first. Generate the solver. Take the cheap win if it is obvious.</h3>
+          <div class="article-copy">
+            <p>CTF inputs rarely arrive in a clean benchmark format. Leaf Litter treats ingestion as a first-class system concern: it extracts artifacts into a stable workspace, infers likely entry points, writes normalized metadata, and gives the rest of the stack something reliable to work with.</p>
+            <ul>
+              <li><strong>Generated solvers:</strong> prompts, curated tool lists, role graphs, model assignments, step caps, budget wiring, and validation hooks are created from the normalized challenge instead of hard-coded once.</li>
+              <li><strong>Role-specific tool access:</strong> a pwn debugger should not see the same tool surface as a crypto critic or a web exploit developer.</li>
+              <li><strong>Codex-first fast path:</strong> easy challenges get one disciplined, low-cost direct shot before the full runtime spins up.</li>
+            </ul>
+            <p>That combination keeps obvious wins cheap while preserving a much deeper orchestration path for the hard problems.</p>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="specialization">
+          <div class="card-kicker">Specialist Tracks</div>
+          <h3>Specialization beats fake universality.</h3>
+          <div class="article-copy">
+            <p>Leaf Litter does not pretend rev, pwn, crypto, web, and forensics are the same problem with different labels. Each track gets its own role graph, tool surface, preanalysis, and strategy profile.</p>
+            <ul>
+              <li><strong>Reverse engineering:</strong> anti-analysis detection, packer handling, WASM workflows, unpacking, and symbolic-analysis hints.</li>
+              <li><strong>Pwn:</strong> mitigation detection, exploit-primitive inference, heap shaping, ROP construction, seccomp-aware fallbacks, container escape, and kernel-specific paths.</li>
+              <li><strong>Crypto:</strong> source-aware probing for lattice attacks, RSA variants, PRNG failures, ECB behavior, and oracle-style bugs with a disciplined write-run-interpret-review cycle.</li>
+              <li><strong>Web:</strong> fingerprinting, source-map extraction, bundle analysis, injection discovery, request smuggling checks, and stateful exploit sequencing across multi-step chains.</li>
+              <li><strong>Forensics and misc:</strong> phased orchestration for images, audio, video, pcaps, disk images, memory dumps, stego, encodings, and bridge paths when a misc challenge is really a hidden specialist problem.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="runtime">
+          <div class="card-kicker">Runtime Control</div>
+          <h3>The runtime is built to heal, rotate, and keep evidence.</h3>
+          <div class="article-copy">
+            <p>Agents stall. APIs timeout. Context windows overflow. Tool calls crash. Exploit attempts work locally and fail remotely. Leaf Litter treats recovery as part of the design, not something to patch in later.</p>
+            <ul>
+              <li><strong>Watchdog recovery:</strong> detect rate limits, timeouts, JSON parse errors, subprocess crashes, and tool failures, then adapt with backoff, chunking, forced JSON, or tool skips.</li>
+              <li><strong>Budget governance:</strong> track token usage, challenge cost, global cost, warnings, pause thresholds, and escalation into stronger models when cheap ones stop making progress.</li>
+              <li><strong>Strategy systems:</strong> rotate through balanced, aggressive, and conservative profiles while excluding already-failed approaches.</li>
+              <li><strong>Partial flag assembly:</strong> store fragments from tool outputs and agent responses, then attempt reconstruction later when the final string only appears in pieces.</li>
+              <li><strong>Human-in-the-loop alerts:</strong> allow a human to inject a hint or approve continued spending without manually taking over the entire run.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="operations">
+          <div class="card-kicker">Operations</div>
+          <h3>Memory, control surfaces, live platform mode, and reproducible reports.</h3>
+          <div class="article-copy">
+            <p>Leaf Litter is designed to feel like an operating system for challenge work, not a one-off benchmark script. That shows up in how it remembers, how it is driven, and what it leaves behind after a run.</p>
+            <ul>
+              <li><strong>Memory and RAG:</strong> session memory, FAISS-backed category stores, artifact indexing, solve-time estimation, and retrieval-guided strategies keep the system from starting cold.</li>
+              <li><strong>Control plane:</strong> a lightweight terminal UI for health checks and guided launches, plus a browser control center for file intake, metadata, logs, previews, and process monitoring.</li>
+              <li><strong>Benchmark mode:</strong> isolated workspaces, parallel challenge execution, and JSON or Markdown reporting turn the project into something measurable.</li>
+              <li><strong>Platform mode:</strong> CTFd login, queue discovery, attachment download, solver generation, optional auto-submission, leaderboard awareness, and submission backoff connect local workflows to live competition play.</li>
+              <li><strong>Trust and reproducibility:</strong> flag validation, consensus options, snapshots, command traces, post-mortems, and replayable artifacts make solved and failed runs equally useful.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel reveal" id="next">
+          <div class="card-kicker">Next Orbit</div>
+          <h3>Why this matters, and where the project goes next.</h3>
+          <div class="article-copy">
+            <p>Leaf Litter matters because it points toward a better question: what happens when CTF automation stops being a novelty and starts behaving like infrastructure? The interesting part is not that it can solve some challenges. The interesting part is that it knows how to load them, plan them, adapt during them, recover from failure, remember what happened, and scale from a single local file to a live competitive queue.</p>
+            <ul>
+              <li><strong>Deeper category stacks:</strong> stronger large-binary reversing, sharper heap and kernel pwn automation, tighter crypto reformulation, and more reliable web exploit confirmation.</li>
+              <li><strong>Stronger learning loops:</strong> better retrieval scoring, smarter promotion and pruning, and more useful solve-template libraries.</li>
+              <li><strong>Large-target handling:</strong> context partitioning, longer-horizon state retention, hierarchical tasking, and cleaner subproblem decomposition.</li>
+              <li><strong>Sharper live competition behavior:</strong> better queue triage, smarter first-blood prioritization, and stronger submission consensus.</li>
+              <li><strong>Better tooling and evaluation:</strong> deeper reversing, symbolic, fuzzing, and exploit-verification infrastructure with clearer regression tracking.</li>
+              <li><strong>Human-agent collaboration:</strong> better instincts for when to ask for a hint, approval, or a category pivot instead of blindly continuing.</li>
+            </ul>
+            <div class="quote-pull">Squid Agent inspired the architecture. Leaf Litter is where that architecture starts turning into a broader operational system.</div>
+          </div>
+        </section>
+      </article>
+
+      <aside class="sidebar-stack">
+        <div class="article-sidebar reveal">
+          <h2>Project Overview</h2>
+          <p>Leaf Litter sits in the same lineage as Squid Agent, but this post frames it as an operator-grade system with routing, recovery, memory, and live control surfaces.</p>
+          <ul class="mini-list">
+            <li><span>Format</span><strong>Long-form project case study</strong></li>
+            <li><span>Primary domain</span><strong>CTF automation</strong></li>
+            <li><span>Lineage</span><strong>Squid Agent inspired</strong></li>
+            <li><span>Runtime mode</span><strong>Local + platform</strong></li>
+            <li><span>Artifacts</span><strong>Reports / replays</strong></li>
+          </ul>
+          <div class="card-kicker">Section Index</div>
+          <div class="toc-list">
+            <a href="#overview">Overview</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#pipeline">Solve Pipeline</a>
+            <a href="#specialization">Specialization</a>
+            <a href="#runtime">Runtime</a>
+            <a href="#operations">Operations</a>
+            <a href="#next">Next Orbit</a>
+          </div>
+        </div>
+
+        <div class="panel reveal">
+          <div class="card-kicker">Project Note</div>
+          <h2>What makes it memorable</h2>
+          <p>Leaf Litter feels less like a generic chatbot and more like a spacecraft console for CTF work: it routes by category, takes a cheap shot first, escalates only when needed, and keeps enough evidence behind to improve the next run.</p>
+          <div class="tag-list">
+            <span class="tag">Normalizer</span>
+            <span class="tag">Fast Path</span>
+            <span class="tag">Watchdog</span>
+            <span class="tag">Replay</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="signal-section" id="signal">
+    <div class="signal-panel reveal">
+      <div class="signal-pre">Case Study Note</div>
+      <h2>Leaf Litter now reads like a real flagship post.</h2>
+      <p>The page presents Leaf Litter as a project case study focused on CTF automation, system design, and operational thinking.</p>
+      <div class="signal-links">
+        <a class="button button--primary" href="blog.html">View Writing & Research</a>
+        <a class="button button--ghost" href="index.html">Return home</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Achyut Vinoth Kumar</span>
+  <span>Security Portfolio • Leaf Litter</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="void-theme.js"></script>
+</body>
+</html>

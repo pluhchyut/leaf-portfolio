@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTF Credibility Piece — Leaf Litter</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="void-theme.css">
+<style>
+  :root{
+    --void:#f3ecdf;
+    --deep:#e2d6c1;
+    --deep-2:#d4c4ac;
+    --ghost:#24301d;
+    --muted:rgba(36,48,29,0.68);
+    --faint:rgba(36,48,29,0.44);
+    --line:rgba(122,163,106,0.22);
+    --line-strong:rgba(122,163,106,0.32);
+    --panel:rgba(250,246,239,0.8);
+    --panel-2:rgba(244,237,226,0.94);
+    --signal:#7aa36a;
+    --violet:#b6976f;
+    --amber:#d7b77a;
+    --rose:#9c8764;
+    --fraunces:"Cormorant Garamond", serif;
+    --sans:"JetBrains Mono", monospace;
+    --mono:"JetBrains Mono", monospace;
+    --shadow:0 28px 70px rgba(107,97,77,0.16);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    min-height:100vh;
+    overflow-x:hidden;
+    color:var(--ghost);
+    font-family:var(--sans);
+    background:
+      radial-gradient(circle at 16% 10%, rgba(140,181,118,0.18), transparent 24%),
+      radial-gradient(circle at 82% 12%, rgba(199,182,144,0.22), transparent 30%),
+      linear-gradient(180deg, #f8f2e8 0%, #efe6d8 48%, #e4d7c1 100%);
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+      linear-gradient(rgba(122,163,106,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(122,163,106,0.024) 1px, transparent 1px);
+    background-size:120px 120px;
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 88%);
+  }
+
+  a{color:inherit}
+
+  .inline-link{
+    text-decoration-line:underline;
+    text-decoration-thickness:2px;
+    text-underline-offset:0.16em;
+    text-decoration-color:rgba(122,163,106,0.62);
+  }
+
+  .inline-link:hover{
+    text-decoration-color:rgba(182,151,111,0.86);
+  }
+
+  .shell{
+    width:min(1180px, calc(100vw - 40px));
+    margin:0 auto;
+    position:relative;
+    z-index:10;
+    padding-bottom:42px;
+  }
+
+  header{
+    padding:24px 0 16px;
+  }
+
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:18px 20px;
+    border:1px solid var(--line);
+    border-radius:22px;
+    background:linear-gradient(180deg, rgba(248,242,232,0.94), rgba(245,238,226,0.78));
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(16px);
+    position:sticky;
+    top:22px;
+    z-index:24;
+  }
+
+  .brand{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    font-family:var(--mono);
+    font-size:0.7rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--ghost);
+  }
+
+  .brand-dot{
+    width:11px;
+    height:11px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--signal), var(--violet));
+    box-shadow:0 0 0 5px rgba(122,163,106,0.12), 0 0 18px rgba(122,163,106,0.2);
+  }
+
+  nav{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:0.62rem;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+  }
+
+  nav a{
+    text-decoration:none;
+    color:var(--faint);
+    transition:color .18s ease, opacity .18s ease;
+  }
+
+  nav a:hover{
+    color:var(--ghost);
+  }
+
+  .hero{
+    padding:60px 0 42px;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:34px;
+    align-items:start;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--signal);
+    background:rgba(250,246,239,0.78);
+    backdrop-filter:blur(8px);
+  }
+
+  .eyebrow::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:999px;
+    background:var(--signal);
+  }
+
+  h1{
+    margin:18px 0 16px;
+    font-family:var(--fraunces);
+    font-size:clamp(3.3rem, 8vw, 6.8rem);
+    line-height:0.94;
+    letter-spacing:-0.04em;
+    max-width:9ch;
+    font-weight:300;
+    color:var(--ghost);
+    text-shadow:0 0 18px rgba(122,163,106,0.08);
+  }
+
+  .hero p{
+    margin:0;
+    max-width:58ch;
+    color:var(--muted);
+    font-size:0.86rem;
+    line-height:2;
+  }
+
+  .hero p + p{
+    margin-top:14px;
+  }
+
+  .hero-note{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(250,246,239,0.84), rgba(242,234,222,0.96));
+    border:1px solid rgba(122,163,106,0.14);
+    box-shadow:var(--shadow);
+    border-radius:24px;
+    padding:24px;
+    backdrop-filter:blur(16px);
+  }
+
+  .hero-note::before,
+  .metric::before,
+  .card::before,
+  .footer-note::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(135deg, rgba(122,163,106,0.11), transparent 34%),
+      linear-gradient(315deg, rgba(182,151,111,0.12), transparent 38%);
+  }
+
+  .hero-note h2{
+    margin:0 0 14px;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.24em;
+    font-family:var(--mono);
+    color:var(--signal);
+    position:relative;
+  }
+
+  .hero-note ul{
+    margin:0;
+    padding-left:18px;
+    list-style:disc;
+    color:var(--muted);
+    line-height:1.85;
+    position:relative;
+  }
+
+  .metrics{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin:10px 0 72px;
+  }
+
+  .metric{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(250,246,239,0.82), rgba(242,234,222,0.94));
+    border:1px solid rgba(122,163,106,0.14);
+    border-radius:22px;
+    padding:22px 20px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(12px);
+  }
+
+  .metric strong{
+    display:block;
+    font-family:var(--fraunces);
+    font-size:2rem;
+    margin-bottom:8px;
+    font-weight:300;
+    color:var(--signal);
+    position:relative;
+  }
+
+  .metric span{
+    color:var(--muted);
+    line-height:1.5;
+    font-size:0.74rem;
+    position:relative;
+  }
+
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    align-items:end;
+    margin:0 0 28px;
+  }
+
+  .section-head h2{
+    margin:0;
+    font-family:var(--fraunces);
+    font-size:clamp(2rem, 4vw, 3.4rem);
+    line-height:1;
+    letter-spacing:-0.03em;
+    font-weight:300;
+    color:var(--ghost);
+  }
+
+  .section-head p{
+    margin:0;
+    max-width:54ch;
+    color:var(--muted);
+    line-height:1.9;
+    font-size:0.8rem;
+  }
+
+  .challenge{
+    border-top:1px solid var(--line);
+    padding:34px 0 44px;
+    scroll-margin-top:110px;
+  }
+
+  .challenge.reveal,
+  .challenge.reveal.vis{
+    transform:none;
+  }
+
+  .challenge.reveal{
+    transition:opacity .7s ease;
+  }
+
+  .challenge-grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:28px;
+  }
+
+  .challenge-meta{
+    position:sticky;
+    top:112px;
+    align-self:start;
+    max-width:22rem;
+  }
+
+  .kicker{
+    font-family:var(--mono);
+    font-size:0.62rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--signal);
+  }
+
+  .challenge h3{
+    margin:12px 0 12px;
+    font-family:var(--fraunces);
+    font-size:clamp(1.8rem, 3vw, 2.7rem);
+    line-height:1.02;
+    letter-spacing:-0.03em;
+    font-weight:300;
+    color:var(--ghost);
+    max-width:10ch;
+  }
+
+  .badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:14px 0 18px;
+  }
+
+  .badge{
+    padding:7px 11px;
+    border-radius:999px;
+    font-family:var(--mono);
+    font-size:0.62rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    border:1px solid rgba(122,163,106,0.18);
+    background:rgba(255,255,255,0.4);
+    color:var(--muted);
+  }
+
+  .badge.status{
+    background:linear-gradient(120deg, rgba(122,163,106,0.14), rgba(182,151,111,0.18));
+    color:var(--ghost);
+    border-color:var(--line);
+  }
+
+  .summary{
+    color:var(--muted);
+    line-height:1.95;
+    margin:0;
+    font-size:0.78rem;
+    max-width:32ch;
+  }
+
+  .challenge-body{
+    display:grid;
+    gap:18px;
+    justify-items:start;
+  }
+
+  .challenge-body > .card,
+  .challenge-body > .lab{
+    width:min(100%, 760px);
+  }
+
+  .challenge-body > .card:nth-of-type(2){
+    width:min(100%, 820px);
+  }
+
+  .challenge-body > .learn,
+  .challenge-body > .result{
+    width:min(100%, 680px);
+  }
+
+  .card{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(250,246,239,0.82), rgba(242,234,222,0.96));
+    border:1px solid rgba(122,163,106,0.14);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(14px);
+  }
+
+  .card h4{
+    margin:0 0 12px;
+    font-size:0.68rem;
+    letter-spacing:0.26em;
+    text-transform:uppercase;
+    font-family:var(--mono);
+    color:var(--signal);
+    position:relative;
+  }
+
+  .card p{
+    margin:0;
+    color:var(--muted);
+    line-height:1.95;
+    font-size:0.8rem;
+    position:relative;
+    max-width:68ch;
+  }
+
+  .steps{
+    margin:0;
+    padding-left:22px;
+    color:var(--ghost);
+    position:relative;
+    max-width:70ch;
+  }
+
+  .steps li{
+    margin:0 0 12px;
+    line-height:1.95;
+    padding-left:6px;
+    color:var(--muted);
+    font-size:0.8rem;
+  }
+
+  .steps strong{
+    color:var(--ghost);
+  }
+
+  code{
+    display:inline-block;
+    padding:0.12rem 0.34rem;
+    border:1px solid var(--line);
+    background:rgba(122,163,106,0.08);
+    color:var(--ghost);
+    border-radius:8px;
+    font-family:var(--mono);
+    font-size:0.92em;
+  }
+
+  .lab{
+    overflow:hidden;
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(122,163,106,0.18);
+    background:rgba(244,237,226,0.94);
+  }
+
+  .lab-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 16px;
+    background:linear-gradient(180deg, rgba(231,222,206,0.98) 0%, rgba(219,206,186,0.98) 100%);
+    color:rgba(36,48,29,0.86);
+    font-family:var(--mono);
+    font-size:0.66rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+  }
+
+  .lab-dots{
+    display:flex;
+    gap:7px;
+  }
+
+  .lab-dots span{
+    width:10px;
+    height:10px;
+    border-radius:999px;
+    display:block;
+  }
+
+  .lab-dots span:nth-child(1){background:var(--signal)}
+  .lab-dots span:nth-child(2){background:var(--amber)}
+  .lab-dots span:nth-child(3){background:var(--violet)}
+
+  .lab pre{
+    margin:0;
+    padding:18px 18px 20px;
+    background:
+      radial-gradient(circle at top right, rgba(122,163,106,0.12), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(182,151,111,0.12), transparent 30%),
+      linear-gradient(180deg, #f7f1e8 0%, #efe4d4 100%);
+    color:rgba(47,60,38,0.86);
+    font-family:var(--mono);
+    font-size:0.86rem;
+    line-height:1.8;
+    white-space:pre-wrap;
+    max-width:72ch;
+  }
+
+  .lab .dim{color:#8c826e}
+  .lab .warn{color:#b28c3f}
+  .lab .blue{color:#64875a}
+  .lab .rose{color:#9d7750}
+
+  .learn{
+    border-left:5px solid var(--signal);
+  }
+
+  .learn p{
+    color:var(--ghost);
+  }
+
+  .result{
+    border-left:5px solid var(--violet);
+  }
+
+  .result p{
+    color:var(--ghost);
+  }
+
+  .footer-note{
+    margin:26px 0 70px;
+    position:relative;
+    overflow:hidden;
+    padding:22px 24px;
+    border-radius:24px;
+    background:linear-gradient(180deg, rgba(250,246,239,0.84), rgba(242,234,222,0.96));
+    border:1px solid rgba(122,163,106,0.14);
+    color:var(--ghost);
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(14px);
+  }
+
+  .footer-note h2{
+    margin:0 0 10px;
+    font-family:var(--fraunces);
+    font-size:2rem;
+    font-weight:300;
+    position:relative;
+  }
+
+  .footer-note p{
+    margin:0;
+    color:var(--muted);
+    line-height:1.95;
+    position:relative;
+  }
+
+  @media (max-width: 980px){
+    .hero,
+    .section-head{
+      grid-template-columns:1fr;
+      display:grid;
+    }
+
+    .challenge-grid{
+      grid-template-columns:240px minmax(0,1fr);
+    }
+
+    .metrics{
+      grid-template-columns:repeat(2,1fr);
+    }
+
+    .topbar{
+      position:static;
+    }
+  }
+
+  @media (max-width: 760px){
+    .challenge-grid{
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .challenge-meta{
+      top:84px;
+      z-index:8;
+      width:min(100%, 34rem);
+      max-width:34rem;
+      padding:18px;
+      border:1px solid rgba(122,163,106,0.14);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(250,246,239,0.94), rgba(242,234,222,0.98));
+      box-shadow:0 18px 42px rgba(107,97,77,0.12);
+      backdrop-filter:blur(12px);
+    }
+
+    .challenge h3{
+      max-width:11ch;
+    }
+
+    .challenge-body > .card,
+    .challenge-body > .lab,
+    .challenge-body > .learn,
+    .challenge-body > .result{
+      width:min(100%, 34rem);
+    }
+  }
+
+  @media (max-width: 640px){
+    .shell{
+      width:min(100vw - 24px, 1180px);
+    }
+
+    nav{
+      gap:12px;
+    }
+
+    .metrics{
+      grid-template-columns:1fr;
+    }
+
+    h1{
+      max-width:none;
+    }
+
+    .topbar{
+      padding:16px;
+      border-radius:18px;
+    }
+  }
+</style>
+</head>
+<body data-page="ctf-credibility" data-lat="40.7128° N" data-lon="74.0060° W">
+  <div id="cur"></div>
+  <div id="cur-r"></div>
+  <canvas id="c"></canvas>
+  <div class="sl"></div>
+  <div class="sig"></div>
+
+  <div class="coords">
+    <div id="lat"></div>
+    <div id="lon"></div>
+    <div id="clock"></div>
+  </div>
+
+  <div class="shell">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="ctf-writeups.html">
+          <span class="brand-dot"></span>
+          <span>Leaf Litter // CTF Credibility Piece</span>
+        </a>
+        <nav>
+          <a href="#why">Why This Exists</a>
+          <a href="#paper">Paper-2</a>
+          <a href="#router">Router</a>
+          <a href="#heapedit">Heapedit</a>
+          <a href="#vulnbank">VulnBank</a>
+          <a href="#kube">Kubernetes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero reveal">
+      <div>
+        <div class="eyebrow">Not a badge wall. Actual problem solving.</div>
+        <h1>Hard CTFs, clean reasoning, real credibility.</h1>
+        <p>
+          This page is built to show what I actually do when a challenge stops being obvious:
+          read source when it exists, reverse behavior when it doesn’t, kill dead ends quickly,
+          and turn messy experiments into a repeatable exploit path.
+        </p>
+        <p>
+          It is intentionally a mix of confirmed solves, source-backed exploit paths, and one genuine dead end.
+          I am keeping the misses in because the point of a credibility piece is to show judgment, iteration,
+          and what I learned when the clean solve did not land.
+        </p>
+      </div>
+      <aside class="hero-note">
+        <h2 id="why">What this piece proves</h2>
+        <ul>
+          <li>I can explain an exploit path clearly, not just say “I got the flag.”</li>
+          <li>I can move across web, binary exploitation, blockchain, and cloud without changing how I think.</li>
+          <li>I keep notes like a builder: what worked, what failed, what stayed partial, and why the best path won.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="metrics reveal" aria-label="credibility metrics">
+      <div class="metric">
+        <strong>5</strong>
+        <span>deep case studies focused on the hardest challenges instead of easy category padding</span>
+      </div>
+      <div class="metric">
+        <strong>4</strong>
+        <span>security domains covered: web, pwn, blockchain, and cloud infrastructure</span>
+      </div>
+      <div class="metric">
+        <strong>1</strong>
+        <span>consistent workflow: observe behavior, form a model, test assumptions, exploit the gap</span>
+      </div>
+      <div class="metric">
+        <strong>0</strong>
+        <span>fake “I just guessed it” energy; every section below shows the mechanics</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head reveal">
+        <h2>Five hard writeups</h2>
+        <p>
+          The “screenshots” below are reconstructed lab snapshots based on source files,
+          exploit notes, and command traces. Some entries are full solves and some are partials or dead ends,
+          but all of them reflect real reasoning instead of cleaned-up hindsight.
+        </p>
+      </div>
+    </section>
+
+    <section class="challenge reveal" id="paper">
+      <div class="challenge-grid">
+        <aside class="challenge-meta">
+          <div class="kicker">Case 01</div>
+          <h3>Paper-2: browser exploit research under a locked-down bot</h3>
+          <div class="badges">
+            <span class="badge status">Research Case / No Flag</span>
+            <span class="badge">Web Exploitation</span>
+            <span class="badge">Hardest Research Case</span>
+            <span class="badge">CSP / CSS Oracle</span>
+          </div>
+          <p class="summary">
+            This one stopped being a normal web challenge very quickly. The job was not “find XSS.”
+            The job was understanding exactly what a bot browser would still do after CSP, URL allowlists,
+            and one-shot secrets were layered on top of each other.
+          </p>
+        </aside>
+        <div class="challenge-body">
+          <div class="card">
+            <h4>Why It Was Hard</h4>
+            <p>
+              The app exposed the secret in <code>body[secret]</code>, but the flag endpoint used
+              <code>getdel</code>, so every wrong guess destroyed the only live token. External navigation was blocked,
+              JS exfil was unreliable, and a lot of seemingly promising browser primitives turned out to be dead ends.
+            </p>
+            <p style="margin-top:12px;">
+              I did not get the flag on this one. I am keeping it here because the investigation itself is one of the best examples
+              of how I test assumptions, cut weak ideas, and turn browser behavior into a measured attack surface.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Step By Step</h4>
+            <ol class="steps">
+              <li><strong>Read the server, not the challenge copy.</strong> I started by mapping the real request flow from the application itself. Uploads were stored in Redis as <code>/paper/:id</code>, the bot only visited those uploaded files, <code>/secret</code> reflected a fresh 32-hex token into the page as both text and a <code>body</code> attribute, and <code>/flag?secret=...</code> used <code>getdel</code>, which meant every bad request burned the current token immediately.</li>
+              <li><strong>Break the problem into browser capabilities.</strong> Instead of asking “how do I steal the flag,” I asked much smaller questions: can the bot be redirected, can it submit a form, can it make a GET with attacker-controlled bytes, can CSS turn a DOM attribute into a URL, can XSLT fetch internal pages, and can prerender trigger requests that normal page flow would block?</li>
+              <li><strong>Test one primitive at a time.</strong> I uploaded tiny HTML, XML, and CSS probes and watched which ones changed the server state. That is where the important split showed up: external CSS loaded, but did not give me the same URL-building behavior that inline CSS did; prerender gave me some browser-side side effects, but not the write primitive I wanted; several POST-style exfil ideas simply never landed.</li>
+              <li><strong>Stop trusting ambiguous signals.</strong> A response like <code>nice try</code> looked exciting at first, but it was not good enough as proof because bot startup failures or mistimed requests could also consume the secret. I tightened the experiments so each test only changed one moving part and I used timing plus very early probes to separate real browser execution from noise.</li>
+              <li><strong>Narrow to the smallest viable oracle.</strong> The best direction was no longer “force the whole exfil in one payload.” It became: keep the payload inline, keep the CSS small, use the secret already exposed in the DOM, and recover state incrementally. I did not finish the flag path, but I did get the challenge down to a much smaller and more measurable browser-behavior problem.</li>
+            </ol>
+            <p style="margin-top:14px;">
+              The important part of this writeup is not a final flag. It is the workflow: reduce a chaotic browser challenge to a list of concrete primitives, kill the ones that lie, and only build on the ones that keep behaving the same way twice.
+            </p>
+          </div>
+          <figure class="lab" aria-label="paper-2 lab snapshot">
+            <div class="lab-top">
+              <div class="lab-dots"><span></span><span></span><span></span></div>
+              <span>Reconstructed Lab Notes</span>
+            </div>
+            <pre><span class="dim">Test 1</span>  External CSS + if(style()) loaded the stylesheet, but never hit <span class="blue">/flag</span>
+<span class="dim">Test 2</span>  Inline CSS + if(style()) <span class="warn">did</span> trigger the right request path
+<span class="dim">Test 3</span>  Prerender JS allowed some GET side effects, but browser-side POST exfil stayed dead
+<span class="dim">Test 4</span>  <span class="blue">attr(secret)</span> + <span class="blue">image-set()</span> became the interesting direction
+<span class="dim">Conclusion</span>  Treat the bot like a hostile runtime and turn it into a small, repeatable oracle</pre>
+          </figure>
+          <div class="card learn">
+            <h4>What I Learned</h4>
+            <p>
+              Hard browser exploitation is mostly measurement. The best progress came from logging what the environment
+              would and would not do, then cutting away the “clever” payloads that looked exciting but were not stable.
+            </p>
+          </div>
+          <div class="card result">
+            <h4>Outcome</h4>
+            <p>
+              Research case only. No flag was recovered here, and I am keeping it in the portfolio because the investigative process
+              is still one of the strongest examples of how I work through a hostile environment. The useful deliverable from this one
+              was a reliable map of which browser primitives were real, which ones were fake wins, and how close the oracle path actually got.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="challenge reveal" id="router">
+      <div class="challenge-grid">
+        <aside class="challenge-meta">
+          <div class="kicker">Case 02</div>
+          <h3>Router: turning leaked output and bad indices into a heap exploit</h3>
+          <div class="badges">
+            <span class="badge">Binary Exploitation</span>
+            <span class="badge">No Source</span>
+            <span class="badge">Heap / OOB Index</span>
+          </div>
+          <p class="summary">
+            This challenge looked like a harmless route planner at first. The real problem was understanding how order objects,
+            map data, and rerouting logic were laid out on the heap when the only interface was a text menu.
+          </p>
+        </aside>
+        <div class="challenge-body">
+          <div class="card">
+            <h4>Why It Was Hard</h4>
+            <p>
+              No source code, instance-specific binaries, and a bug hidden behind user-facing indices.
+              The hints were honest: output leaked internal state, and indices that crossed boundaries did weird things on the heap.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Step By Step</h4>
+            <ol class="steps">
+              <li><strong>Learn normal behavior before touching the bug.</strong> I started with <code>help</code>, loaded each city map, created a single order, rerouted it normally, and dispatched it. That gave me the baseline output for a healthy order and made it obvious which fields changed when the program recalculated a path.</li>
+              <li><strong>Use order creation as heap grooming.</strong> Adding multiple orders was not just feature use; it was a way to force the binary to allocate a repeatable set of objects. By changing the number of live orders and rerunning the same commands, I could watch when route data started echoing extra bytes and when neighboring structures appeared to affect one another.</li>
+              <li><strong>Probe the index boundary carefully.</strong> The hints pointed straight at indices, so I checked valid values first, then values just outside the expected range, then negative indices. The useful moment was not “it crashed,” it was “it printed something that looked like internal state,” because that meant the bug was crossing object boundaries without immediately killing the process.</li>
+              <li><strong>Turn the leak into a map of adjacent heap state.</strong> Once the output started including data that did not belong to the selected order, I treated that as orientation. I repeated the same allocation pattern until I got similar leaks, then used those leaks to estimate which object sat next to which and what kind of field I was likely corrupting.</li>
+              <li><strong>Promote the out-of-bounds access into control.</strong> With the layout stabilized, the bug stopped being “weird output” and became a constrained write into adjacent route/order metadata. From there, the exploit path was to redirect behavior toward the hidden success logic rather than trying random large corruptions and hoping for a win.</li>
+            </ol>
+            <p style="margin-top:14px;">
+              The reason this solve mattered to me is that it was not a one-command trick. I had to make the binary teach me its own layout through repeated, disciplined interaction, then use the leak to turn an unreliable bug into a deliberate exploit.
+            </p>
+          </div>
+          <figure class="lab" aria-label="router lab snapshot">
+            <div class="lab-top">
+              <div class="lab-dots"><span></span><span></span><span></span></div>
+              <span>Reconstructed Terminal Snapshot</span>
+            </div>
+            <pre>$ nc mysterious-sea.picoctf.net 51703
+router&gt; help
+router&gt; load city1.map
+router&gt; add_order A1 B7
+router&gt; add_order C3 D9
+router&gt; reroute -1
+<span class="warn">debug-ish output leaks internal route state</span>
+router&gt; dispatch
+
+<span class="dim">Working theory:</span> a negative or oversized index crosses from one heap object into the next
+<span class="dim">Exploit goal:</span> use the leak to stabilize the corruption instead of brute forcing it</pre>
+          </figure>
+          <div class="card learn">
+            <h4>What I Learned</h4>
+            <p>
+              When source is missing, the command interface becomes the debugger. The fastest way forward is to make the program
+              explain its memory model through its own behavior instead of trying to “out-clever” it on the first pass.
+            </p>
+          </div>
+          <div class="card result">
+            <h4>Outcome</h4>
+            <p>
+              Flag recovered in the original solve after stabilizing the out-of-bounds heap behavior with leaked state from the text interface.
+              Public version redacts the token as <code>picoCTF{[redacted]}</code>, but the important part is that the exploit path was repeatable,
+              not a lucky one-off corruption.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="challenge reveal" id="heapedit">
+      <div class="challenge-grid">
+        <aside class="challenge-meta">
+          <div class="kicker">Case 03</div>
+          <h3>Heapedit: reading glibc tcache like a data structure, not a mystery</h3>
+          <div class="badges">
+            <span class="badge">Binary Exploitation</span>
+            <span class="badge">Allocator Internals</span>
+            <span class="badge">Tcache</span>
+          </div>
+          <p class="summary">
+            The flag was never hidden behind shellcode or a return address overwrite. It was sitting in a freed heap chunk,
+            and the whole challenge was about knowing how tcache threads those chunks together.
+          </p>
+        </aside>
+        <div class="challenge-body">
+          <div class="card">
+            <h4>Why It Was Hard</h4>
+            <p>
+              This is the kind of pwn problem that punishes guessing. You only get the right answer if you understand how a freed chunk
+              stores the next pointer and how the program is validating the traversal.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Step By Step</h4>
+            <ol class="steps">
+              <li><strong>Read the source all the way through.</strong> In <a class="inline-link" href="file:///Users/achyut/Downloads/heapedit.c">heapedit.c</a>, the program allocates six same-sized chunks, zeros them, reads the flag from disk, and copies it into the last chunk at <code>FLAG_OFFSET</code>. That offset matters: the first pointer-sized bytes of a freed chunk are where the allocator stores the next free-list pointer, so the challenge author intentionally placed the flag just after that.</li>
+              <li><strong>Pay attention to free order.</strong> The code frees the chunks in reverse order, from <code>chunks[5]</code> down to <code>chunks[0]</code>. Because tcache is LIFO, the final head of the free list becomes <code>chunks[0]</code>, which the program even prints for you before asking questions. That immediately turns the task into a linked-list reconstruction problem.</li>
+              <li><strong>Follow the allocator metadata, not the flag text.</strong> After each correct address, the binary does a <code>memcpy</code> of the first pointer-sized bytes from that freed chunk into <code>next</code>. In other words, it is literally traversing the tcache singly-linked list. Once I understood that, the answers were the chunk addresses in free-list order, not guesses about where the flag string might be.</li>
+              <li><strong>Use the invariant to recover the final chunk.</strong> Because all six allocations are known and the program validates that each <code>next</code> pointer is one of those known chunks, I could reason cleanly about the traversal instead of fuzzing it. The last chunk in that walk is the one whose user area still contains the flag bytes starting one pointer-width in.</li>
+              <li><strong>Let the program print the reward.</strong> After the traversal is satisfied, the binary prints <code>chunks[CHUNK_COUNT-1] + FLAG_OFFSET</code>. So the exploit was really about proving I understood the allocator state well enough for the binary to reveal the string on its own.</li>
+            </ol>
+            <p style="margin-top:14px;">
+              This is a good example of why source-reading matters. The challenge looks like heap sorcery from the outside, but in the source it collapses into a very understandable question about tcache layout and freed-chunk metadata.
+            </p>
+          </div>
+          <figure class="lab" aria-label="heapedit source snapshot">
+            <div class="lab-top">
+              <div class="lab-dots"><span></span><span></span><span></span></div>
+              <span>Source Excerpt</span>
+            </div>
+            <pre>memcpy((char*)chunks[CHUNK_COUNT-1] + FLAG_OFFSET, flag_buf, flen + 1);
+void *head = chunks[0];
+printf("tcache head (start of free list) -&gt; %p\\n", head);
+
+for (int i = CHUNK_COUNT - 1; i &gt;= 0; --i) {
+    free(chunks[i]);
+}
+
+<span class="dim">Read the allocator layout first.</span>
+<span class="dim">The exploit path is a traversal problem, not a smash-the-stack problem.</span></pre>
+          </figure>
+          <div class="card learn">
+            <h4>What I Learned</h4>
+            <p>
+              A lot of “hard” heap challenges become much cleaner once I stop thinking in terms of corruption first
+              and start thinking in terms of allocator invariants. Here, understanding the free list was the exploit.
+            </p>
+          </div>
+          <div class="card result">
+            <h4>Outcome</h4>
+            <p>
+              Flag recovered in the original solve by reconstructing the free-list order correctly and following the allocator metadata
+              all the way to the chunk holding the copied flag bytes. Public version redacts the token as <code>picoCTF{[redacted]}</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="challenge reveal" id="vulnbank">
+      <div class="challenge-grid">
+        <aside class="challenge-meta">
+          <div class="kicker">Case 04</div>
+          <h3>VulnBank: draining a contract that “checked balances” but paid too early</h3>
+          <div class="badges">
+            <span class="badge">Blockchain</span>
+            <span class="badge">Smart Contract Audit</span>
+            <span class="badge">Reentrancy</span>
+          </div>
+          <p class="summary">
+            This is the classic pattern that keeps surviving code reviews: the check exists, the balance exists,
+            and the contract still loses because the state update happens after the external call.
+          </p>
+        </aside>
+        <div class="challenge-body">
+          <div class="card">
+            <h4>Why It Was Hard</h4>
+            <p>
+              The bug is conceptually simple, but real credibility comes from spotting it fast in source, turning it into a minimal attack contract,
+              and understanding why the exploit works despite the presence of a balance check.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Step By Step</h4>
+            <ol class="steps">
+              <li><strong>Start with the order of operations.</strong> In <a class="inline-link" href="file:///Users/achyut/Downloads/VulnBank.sol">VulnBank.sol</a>, the vulnerable line is not subtle: <code>msg.sender.call{value: amount}("")</code> happens before <code>balances[msg.sender] -= amount</code>. That means the contract hands control to the recipient while its own accounting still reflects the old balance.</li>
+              <li><strong>Check the full win condition.</strong> I did not stop at spotting reentrancy. I also read the end of <code>withdraw()</code> and saw that the flag is only revealed when <code>address(this).balance == 0</code>. That changes the exploit goal from “prove I can reenter” to “drain the whole vault cleanly.”</li>
+              <li><strong>Write the smallest possible attack contract.</strong> The helper only needed a function to deposit a seed amount and a <code>receive()</code> fallback. In that fallback, I called back into <code>withdraw()</code> again while the previous call had not yet reduced <code>balances[msg.sender]</code>. Solidity 0.6-style low-level <code>call</code> forwards enough gas for that reentry path to stay alive.</li>
+              <li><strong>Use a controlled recursion amount.</strong> I seeded the bank with a small deposit and withdrew in the same increment repeatedly. Because the mapping check kept seeing the pre-decrement balance on each nested entry, the bank would keep paying out until its own ether balance approached zero.</li>
+              <li><strong>Stop at the reveal point, not after it.</strong> The clean solve is the one that empties the contract and triggers the reveal logic without overshooting or breaking the recursion. Once the vault balance hit zero, the contract emitted the flag and <code>getFlag()</code> became readable.</li>
+            </ol>
+            <p style="margin-top:14px;">
+              What made this satisfying was that the exploit was minimal. No fancy EVM trick was needed; just careful reading, one small receiver contract, and making the contract’s own payout order work against it.
+            </p>
+          </div>
+          <figure class="lab" aria-label="VulnBank source snapshot">
+            <div class="lab-top">
+              <div class="lab-dots"><span></span><span></span><span></span></div>
+              <span>Source Excerpt</span>
+            </div>
+            <pre>function withdraw(uint amount) public {
+    require(balances[msg.sender] &gt;= amount, "Insufficient funds available");
+
+    (bool sent, ) = msg.sender.call{value: amount}("");
+    balances[msg.sender] -= amount;
+
+    require(sent, "Transfer failed");
+}
+
+<span class="rose">External interaction before effect update = reentrancy window.</span></pre>
+          </figure>
+          <div class="card learn">
+            <h4>What I Learned</h4>
+            <p>
+              “We added checks” is not a security argument. In smart contracts especially, the order of effects matters as much as the existence of a guard.
+            </p>
+          </div>
+          <div class="card result">
+            <h4>Outcome</h4>
+            <p>
+              Flag recovered in the original solve by using a reentrant receiver contract to withdraw repeatedly before the balance ledger updated,
+              draining the vault to the exact reveal condition. Public version redacts the token as <code>picoCTF{[redacted]}</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="challenge reveal" id="kube">
+      <div class="challenge-grid">
+        <aside class="challenge-meta">
+          <div class="kicker">Case 05</div>
+          <h3>Kubernetes secrets: turning cluster access into the flag with almost no app logic</h3>
+          <div class="badges">
+            <span class="badge">Cloud / Infra</span>
+            <span class="badge">Kubernetes</span>
+            <span class="badge">Secrets Enumeration</span>
+          </div>
+          <p class="summary">
+            This challenge was a good reminder that not every compromise looks like code execution.
+            Sometimes the entire path is “you already have the control-plane credentials, so use them correctly.”
+          </p>
+        </aside>
+        <div class="challenge-body">
+          <div class="card">
+            <h4>Why It Was Hard</h4>
+            <p>
+              The hard part was not exploitation syntax. It was recognizing that the supplied kubeconfig was the attack surface,
+              and that Kubernetes secrets are only “hidden” until somebody with the right config asks for them.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Step By Step</h4>
+            <ol class="steps">
+              <li><strong>Start with the credentials you were given.</strong> <a class="inline-link" href="file:///Users/achyut/Downloads/kubeconfig.yaml">kubeconfig.yaml</a> already contains everything that matters: cluster information, a client certificate, and the private key material. The first lesson here was that the config file itself was the foothold, not just a setup artifact.</li>
+              <li><strong>Make the config usable against the exposed cluster.</strong> Once the challenge endpoint was live, I used the supplied kubeconfig with <code>kubectl</code> and ignored TLS validation issues per the challenge hint. The goal at this stage was simply to authenticate successfully and prove I could talk to the control plane as the provided identity.</li>
+              <li><strong>Enumerate the cluster before guessing names.</strong> The first commands were not “get the flag.” They were <code>kubectl get namespaces</code>, <code>kubectl get secrets -A</code>, and then more targeted requests once I knew which namespace and object names looked relevant. That kept me from wasting time on fantasy object names or assuming the flag lived in <code>default</code> without evidence.</li>
+              <li><strong>Pull the secret as structured data.</strong> Once the right secret object was identified, I fetched it as JSON or with a <code>jsonpath</code> expression. Kubernetes secrets are just base64-encoded key-value data, so the remaining step was decoding the field that held the flag rather than “exploiting” anything in the traditional sense.</li>
+              <li><strong>Treat the platform itself as the target.</strong> There was no need for pod escape, code execution, or container abuse. The solve was understanding that authenticated access to the Kubernetes API already gave me the exact read path I needed, and the flag fell out of standard cluster mechanics.</li>
+            </ol>
+            <p style="margin-top:14px;">
+              This writeup is here because it shows a different kind of security thinking. A lot of challenges want flashy exploitation; this one rewarded patience, enumeration, and trusting the platform’s data model.
+            </p>
+          </div>
+          <figure class="lab" aria-label="kubernetes lab snapshot">
+            <div class="lab-top">
+              <div class="lab-dots"><span></span><span></span><span></span></div>
+              <span>Reconstructed kubectl Flow</span>
+            </div>
+            <pre>$ kubectl --kubeconfig kubeconfig.yaml get secrets -A
+NAMESPACE   NAME                 TYPE     DATA
+default     flag-secret          Opaque   1
+
+$ kubectl --kubeconfig kubeconfig.yaml get secret flag-secret -o jsonpath='{.data.flag}'
+cGljb0NURnt...base64...
+
+$ python3 -c 'import base64; print(base64.b64decode("...").decode())'
+<span class="warn">flag material recovered from the control plane itself</span></pre>
+          </figure>
+          <div class="card learn">
+            <h4>What I Learned</h4>
+            <p>
+              Infrastructure challenges reward calm enumeration. The fastest route is usually not “attack harder,”
+              it is “understand what object store, auth model, and serialization format you are already allowed to touch.”
+            </p>
+          </div>
+          <div class="card result">
+            <h4>Outcome</h4>
+            <p>
+              Flag recovered in the original solve by authenticating with the supplied kubeconfig, enumerating the right secret object,
+              and decoding the stored value from the control plane. Public version redacts the token as <code>picoCTF{[redacted]}</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-note reveal">
+      <h2>This is the point of the page</h2>
+      <p>
+        I wanted a credibility piece that shows more than participation. These writeups make the hidden part visible:
+        how I debug, how I cut bad ideas quickly, how I read source, and how I keep moving when a challenge turns from “solve” into “research.”
+      </p>
+    </section>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="void-theme.js"></script>
+</body>
+</html>

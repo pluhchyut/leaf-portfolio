@@ -1,24 +1,157 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Void Cartographer: a deep-space portfolio interface built as a living celestial atlas."
-    />
-    <meta name="theme-color" content="#03050f" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <title>Void Cartographer</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achyut Vinoth Kumar — Security Portfolio</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="void-theme.css">
+</head>
+<body data-page="home" data-lat="40.7128° N" data-lon="74.0060° W">
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="c"></canvas>
+<div class="sl"></div>
+<div class="sig"></div>
+
+<div class="coords">
+  <div id="lat"></div>
+  <div id="lon"></div>
+  <div id="clock"></div>
+</div>
+
+<header class="site-nav">
+  <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a class="is-active" href="index.html">Home</a>
+    <a href="blog.html">Blog</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropdown__trigger" type="button" aria-expanded="false">CTF</button>
+      <div class="nav-dropdown__panel">
+        <a href="ctf-writeups.html">Writeups</a>
+        <a href="ctf-challenges.html">Challenges</a>
+        <a href="leaf-litter.html">Leaf Litter</a>
+      </div>
+    </div>
+    <a href="#signal">Signal</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <section class="page-hero reveal">
+    <div>
+      <div class="eyebrow">Security Research • CTF • Technical Writing</div>
+      <h1 class="hero-title">Security <em>Research</em><span>Portfolio / Case Studies / Projects</span></h1>
+      <p class="lede">Portfolio focused on offensive security, CTF case studies, long-form technical writing, and project work. The archive brings together challenge analysis, research notes, and tooling built around practical problem solving.</p>
+      <div class="button-row">
+        <a class="button button--primary" href="blog.html">View Writing</a>
+        <a class="button button--ghost" href="ctf-writeups.html">Open Case Studies</a>
+      </div>
+      <div class="tag-list">
+        <span class="tag">CTF</span>
+        <span class="tag">Leaf Litter</span>
+        <span class="tag">Reverse Engineering</span>
+        <span class="tag">Automation</span>
+      </div>
+    </div>
+
+    <aside class="panel reveal">
+      <h2>Portfolio Snapshot</h2>
+      <p>The site is organized as a public-facing portfolio with dedicated lanes for technical writing, challenge analysis, and project work.</p>
+      <ul class="mini-list">
+        <li><span>Selected studies</span><strong>05 case pages</strong></li>
+        <li><span>Featured project</span><strong>Leaf Litter</strong></li>
+        <li><span>Research archive</span><strong>Active</strong></li>
+        <li><span>Coverage</span><strong>CTF / Tooling / Notes</strong></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Portfolio Routes</div>
+      <h2>Research, writing, and project work in one system.</h2>
+      <p class="section-copy">The portfolio is organized into a writing archive, a case-study shelf, a challenge research board, and a dedicated project page for CTF automation work.</p>
+    </div>
+    <div class="post-grid">
+      <a class="route-card reveal" href="blog.html">
+        <div class="card-kicker">Writing & Research</div>
+        <h3 class="card-title">Technical writing, case studies, and project notes.</h3>
+        <p>A central archive for long-form security writing across CTF work, tooling, and research.</p>
+        <div class="route-foot">View writing →</div>
+      </a>
+      <a class="route-card reveal" href="ctf-writeups.html">
+        <div class="card-kicker">CTF / Case Studies</div>
+        <h3 class="card-title">Selected writeups with dedicated pages.</h3>
+        <p>A curated archive for challenge breakdowns, exploit paths, debugging notes, and outcome summaries.</p>
+        <div class="route-foot">Open case studies →</div>
+      </a>
+      <a class="route-card reveal" href="ctf-challenges.html">
+        <div class="card-kicker">Challenge Research</div>
+        <h3 class="card-title">Supporting notes and active investigations.</h3>
+        <p>Working observations, category-specific notes, and intermediate findings that support fuller case studies.</p>
+        <div class="route-foot">Open research board →</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Capabilities</div>
+      <h2>Built for the mix of code, research, and storytelling.</h2>
+    </div>
+    <div class="stats-grid">
+      <article class="stat-card reveal">
+        <strong>05</strong>
+        <span>Featured case studies</span>
+      </article>
+      <article class="stat-card reveal">
+        <strong>01</strong>
+        <span>Featured automation project</span>
+      </article>
+      <article class="stat-card reveal">
+        <strong>04</strong>
+        <span>Core security domains</span>
+      </article>
+      <article class="stat-card reveal">
+        <strong>Long</strong>
+        <span>Form technical writing</span>
+      </article>
+    </div>
+    <div class="grid-2">
+      <article class="capability-card reveal">
+        <div class="card-kicker">Technical Writing</div>
+        <h3 class="card-title">Long-form analysis with room for reasoning, tooling, and results.</h3>
+        <p>Each section is designed to make methodology visible, from exploit construction to debugging decisions and post-solve reflection.</p>
+      </article>
+      <article class="capability-card reveal">
+        <div class="card-kicker">Project Work</div>
+        <h3 class="card-title">Security tooling and automation sit alongside research.</h3>
+        <p>Leaf Litter anchors the project section as a deeper look at CTF automation, system design, and operational thinking.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="signal-section" id="signal">
+    <div class="signal-panel reveal">
+      <div class="signal-pre">Selected Work</div>
+      <h2>Technical writing and project work, organized for review.</h2>
+      <p>The portfolio combines challenge case studies, research notes, and engineering projects in a format built for clear technical evaluation.</p>
+      <div class="signal-links">
+        <a class="button button--primary" href="blog.html">View Writing & Research</a>
+        <a class="button button--ghost" href="leaf-litter.html">Open Leaf Litter</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Achyut Vinoth Kumar</span>
+  <span>Security Portfolio • Home</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="void-theme.js"></script>
+</body>
 </html>
