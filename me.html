@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Me — Achyut Vinoth Kumar</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="leaf-theme.css">
+</head>
+<body data-page="me" data-lat="41.8781° N" data-lon="87.6298° W">
+<div id="cur"></div>
+<div id="cur-r"></div>
+<canvas id="c"></canvas>
+<div class="sl"></div>
+<div class="sig"></div>
+
+<div class="coords">
+  <div id="lat"></div>
+  <div id="lon"></div>
+  <div id="clock"></div>
+</div>
+
+<header class="site-nav">
+  <a class="nav-logo" href="index.html">A<span>.</span>V<span>.</span>K <span>//</span> Security Portfolio</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a class="is-active" href="me.html">Me</a>
+    <a href="leaf-litter.html">Leaf Litter</a>
+    <a href="ctf-writeups.html">CTFs</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <section class="page-hero reveal">
+    <div>
+      <div class="eyebrow">Profile • Focus • Security Work</div>
+      <h1 class="hero-title">About <em>Me</em><span>Pwn-focused CTF player with hands-on exploit and research experience</span></h1>
+      <p class="lede">I focus primarily on binary exploitation, with the strongest results in challenges involving memory corruption, heap behavior, leaked state, and exploit stabilization. I also have hands-on experience in smart contract security, and I have worked across reverse engineering and forensics while continuing to build depth in web exploitation and cryptography.</p>
+      <div class="button-row">
+        <a class="button button--primary" href="ctf-writeups.html">Open CTFs</a>
+        <a class="button button--ghost" href="leaf-litter.html">Open Leaf Litter</a>
+      </div>
+      <div class="tag-list">
+        <span class="tag">Pwn</span>
+        <span class="tag">Reverse Engineering</span>
+        <span class="tag">Smart Contracts</span>
+        <span class="tag">Forensics</span>
+        <span class="tag">Web / Crypto Growth</span>
+      </div>
+    </div>
+
+    <aside class="panel reveal">
+      <h2>Profile Snapshot</h2>
+      <ul class="mini-list">
+        <li><span>Primary</span><strong>Binary Exploitation / Pwn</strong></li>
+        <li><span>Secondary</span><strong>Reverse Engineering / Crypto</strong></li>
+        <li><span>Additional</span><strong>Blockchain / Smart Contract Security</strong></li>
+        <li><span>Experience</span><strong>Forensics</strong></li>
+        <li><span>Currently building</span><strong>Web Exploitation</strong></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="stats-grid">
+      <article class="stat-card reveal">
+        <div class="card-kicker">Primary Focus</div>
+        <strong>Pwn</strong>
+        <span>Memory corruption, leaks, control flow, exploit stability</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Secondary</div>
+        <strong>Rev</strong>
+        <span>Binary behavior, reverse workflows, debugging, triage</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Additional</div>
+        <strong>EVM</strong>
+        <span>Reentrancy, ownership bugs, and contract logic flaws</span>
+      </article>
+      <article class="stat-card reveal">
+        <div class="card-kicker">Approach</div>
+        <strong>State</strong>
+        <span>Ordering, invariants, and edge cases over guesswork</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Focus Areas</div>
+      <h2>Where the work is strongest.</h2>
+      <p class="section-copy">The strongest work in this portfolio sits where exploit development, low-level reasoning, and careful debugging meet. The mix below is meant to show depth honestly rather than flatten everything into a generic “security” label.</p>
+    </div>
+    <div class="grid-2">
+      <article class="capability-card reveal">
+        <div class="card-kicker">Binary Exploitation</div>
+        <h3 class="card-title">The primary CTF focus is pwn.</h3>
+        <p>The strongest results come from challenges involving heap layout, out-of-bounds access, memory corruption, leaked state, exploit stabilization, and control-flow manipulation.</p>
+      </article>
+      <article class="capability-card reveal">
+        <div class="card-kicker">Smart Contracts</div>
+        <h3 class="card-title">Blockchain work centers on concrete logic flaws.</h3>
+        <p>That includes reentrancy, ownership mistakes, contract state assumptions, and attack paths where ordering and visibility decide whether the exploit works.</p>
+      </article>
+      <article class="capability-card reveal">
+        <div class="card-kicker">Reverse / Forensics</div>
+        <h3 class="card-title">Cross-category work still comes from first principles.</h3>
+        <p>Experience across reverse engineering and forensics helps with binary behavior, artifact triage, debugging, and building a model before choosing a solve path.</p>
+      </article>
+      <article class="capability-card reveal">
+        <div class="card-kicker">Current Growth</div>
+        <h3 class="card-title">Web exploitation and cryptography are active growth areas.</h3>
+        <p>Those categories are part of the current skill-building track, with the goal of bringing the same level of exploit discipline and technical confidence to them over time.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid-2">
+      <article class="panel reveal">
+        <div class="card-kicker">Working Style</div>
+        <h2>How problems get approached</h2>
+        <p>Most of the work here is grounded in building a reliable model first: what state exists, what invariants break, what assumptions the target makes, and how to turn that into a repeatable exploit path rather than a lucky run.</p>
+        <p>That usually means reading behavior closely, killing weak ideas quickly, and staying focused on exploitability instead of collecting disconnected observations.</p>
+      </article>
+      <article class="panel reveal">
+        <div class="card-kicker">One-Line Summary</div>
+        <h2>Pwn-focused, systems-minded, and exploit-driven</h2>
+        <p>I am a pwn-focused CTF player with a strong interest in smart contract exploitation and hands-on experience across reverse engineering and forensics.</p>
+        <p>The portfolio is built to show that through case studies, technical writing, and project work instead of broad claims.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="signal-section" id="signal">
+    <div class="signal-panel reveal">
+      <div class="signal-pre">Profile Note</div>
+      <h2>The strongest work here is practical, low-level, and exploit-oriented.</h2>
+      <p>This page is meant to give a quick employer-facing read on technical strengths before diving into the CTF case studies or the Leaf Litter project writing.</p>
+      <div class="signal-links">
+        <a class="button button--primary" href="ctf-writeups.html">Open CTFs</a>
+        <a class="button button--ghost" href="index.html">Return Home</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Achyut Vinoth Kumar</span>
+  <span>Security Portfolio • Me</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="leaf-theme.js"></script>
+</body>
+</html>
